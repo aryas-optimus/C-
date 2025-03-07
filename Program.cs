@@ -1357,8 +1357,76 @@ using System.Numerics;
 
 //Deep Copy
 
+//namespace deep
+//{
+//    public class Person
+//    {
+//        public string Name;
+//        public int[] Scores;
+
+//        public Person(string name, int[] scores)
+//        {
+//            Name = name;
+//            // Deep copy of the Scores array
+//            Scores = (int[])scores.Clone();
+//        }
+//    }
+
+//    class Program
+//    {
+//        static void Main()
+//        {
+//            int[] scores1 = { 90, 85, 88 };
+//            Person person1 = new Person("Alice", scores1);
+//            Person person2 = new Person(person1.Name, person1.Scores);
+
+//            person2.Scores[0] = 100;
+
+//            Console.WriteLine(person1.Scores[0]);  
+//        }
+//    }
+//}
 
 
+//Deep copy for refernce type
+
+
+
+//public class Person
+//{
+//    public string Name;
+//    public int Age;
+
+//    public Person(string name, int age)
+//    {
+//        Name = name;
+//        Age = age;
+//    }
+
+//    public Person DeepCopy()
+//    {
+//        return new Person(this.Name, this.Age);
+//    }
+//}
+
+//class Program
+//{
+//    static void Main()
+//    {
+//        Person[] originalArray =
+//        {
+//            new Person("Alice", 30),
+//            new Person("Bob", 25)
+//        };
+
+//        Person[] deepCopy = originalArray.Select(person => person.DeepCopy()).ToArray();
+
+//        deepCopy[0].Name = "Changed Name";
+
+//        Console.WriteLine(originalArray[0].Name);  
+//        Console.WriteLine(deepCopy[0].Name);       
+//    }
+//}
 
 
 
@@ -1722,7 +1790,6 @@ using System.Numerics;
 //    {
 //        Console.WriteLine("Before async operation");
 
-//        // Call the async method and wait for it to finish
 //        await SimpleAsyncMethod();
 
 //        Console.WriteLine("After async operation");
@@ -1730,8 +1797,7 @@ using System.Numerics;
 
 //    static async Task SimpleAsyncMethod()
 //    {
-//        // Simulate a delay (like waiting for a file or network operation)
-//        await Task.Delay(2000);  // Wait for 2 seconds
+//        await Task.Delay(2000);  
 //        Console.WriteLine("Async operation completed!");
 //    }
 //}
@@ -1752,3 +1818,251 @@ using System.Numerics;
 //        }
 //    }
 //}
+
+
+//IQueryable
+//class Program
+//{
+//    public static void Main(string[] args)
+//    {
+//        List<int> numbers = new List<int> { 2, 4, 3, 6, 7, 8 };
+//        IQueryable<int> queryable = numbers.AsQueryable();
+//        IQueryable<int> filterednum = queryable.Where(n => n % 2 == 0);
+//        IEnumerator<int> enumerator = filterednum.GetEnumerator();
+//        while (enumerator.MoveNext())
+//        {
+//            Console.WriteLine(enumerator.Current);
+//        }
+//    }
+//}
+
+
+
+
+//yield keyword
+
+//class withoutyield
+//{
+//    static IEnumerable<int> GetEvenNumbers(int upto)
+//    {
+//        List<int> numbers = new List<int>();
+//        for (int i = 0; i <= upto; i += 2)
+//        {
+//            numbers.Add(i);
+//            Console.WriteLine("Print");
+//        }
+//        return numbers;
+//    }
+
+//    static void Main(string[] args)
+//    {
+//        IEnumerable<int> getEvenNumbers = GetEvenNumbers(10);
+
+//        foreach (int evenNumber in getEvenNumbers)
+//        {
+//            Console.WriteLine(evenNumber);
+//        }
+//    }
+
+//}
+
+
+
+
+//class withyield
+//{
+//    static IEnumerable<int> GetEvenNumbers(int upto)
+//    {
+//        for (int i = 0; i <= upto; i += 2)
+//        {
+//            yield return i;
+//            Console.WriteLine("Print");
+//        }
+//    }
+
+//    static void Main(string[] args)
+//    {
+//        IEnumerable<int> getEvenNumbers = GetEvenNumbers(10);
+
+//        foreach (int evenNumber in getEvenNumbers)
+//        {
+//            Console.WriteLine(evenNumber);
+//        }
+//    }
+//}
+
+//class withyield
+//{
+//    static IEnumerable<int> GetEvenNumbers(int upto)
+//    {
+//        for (int i = 0; i <= upto; i += 2)
+//        {
+//            yield return i;
+//            yield return i+1;
+//            Console.WriteLine("Print");
+//        }
+//    }
+
+//    static void Main(string[] args)
+//    {
+//        IEnumerable<int> getEvenNumbers = GetEvenNumbers(10);
+
+//        foreach (int evenNumber in getEvenNumbers)
+//        {
+//            Console.WriteLine(evenNumber);
+//        }
+//    }
+
+//}
+
+
+
+//Custom Exception
+
+//namespace cexception
+//{
+//    public class InvalidAgeException : Exception
+//    {
+//        public InvalidAgeException() : base("Invalid age provided") { }
+
+//        public InvalidAgeException(string message) : base(message) { }
+
+//        public InvalidAgeException(string message, Exception innerException) : base(message, innerException) { }
+//    }
+
+//    class Program
+//    {
+//        static void Main()
+//        {
+//            try
+//            {
+//                int age = -5;
+//                if (age < 0)
+//                {
+//                    //throw new InvalidAgeException();  //First Constructor
+//                    //throw new InvalidAgeException("Age cannot be negative.");  //Second Constructor
+//                    throw new InvalidAgeException("Age cannot be negative.", new Exception("Inner exception details"));  //Third Constructor
+//        
+//            }
+//            catch (InvalidAgeException ex)
+//            {
+//                Console.WriteLine($"Error: {ex.Message}");
+
+//                if (ex.InnerException != null)
+//                {
+//                    Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+//                }
+//            }
+//        }
+//    }
+//}
+
+
+//Inner Exception
+
+//class Program
+//{
+//    static void ProcessData()
+//    {
+//        try
+//        {
+//            throw new InvalidOperationException("An error occured in processing.");
+//        }
+//        catch (InvalidOperationException ex)
+//        {
+//            //Throw a new exception and wrap the original exception as an inner exception
+//            throw new ApplicationException("An application error occure.", ex);
+//        }
+//    }
+
+//    static void Main()
+//    {
+//        try
+//        {
+//            ProcessData();
+//        }
+
+//        catch (ApplicationException ex)
+//        {
+//            Console.WriteLine($"outer Exception: {ex.Message}");
+//            if (ex.InnerException != null)
+//            {
+//                Console.WriteLine($"inner Exception: {ex.InnerException.Message}");
+//            }
+//        }
+//    }
+//}
+
+
+
+
+//Custom Collection
+
+//namespace cuscol
+//{
+//    public class MyCustomCollection<T> : IEnumerable<T>
+//    {
+//        private List<T> items = new List<T>();
+
+//        //Adding item to the collection
+//        public void Add(T item)
+//        {
+//            items.Add(item);
+//        }
+
+//        //Removing item
+
+//        public bool Remove(T item)
+//        {
+//            return items.Remove(item);
+//        }
+
+//        //Counting items
+//        public int count => items.Count;
+
+//        //Accessing item
+//        public T this[int index]
+//        {
+//            get => items[index];
+//            set => items[index] = value;
+//        }
+
+//        //Implementing IEnumerable interface
+//        public IEnumerator<T> GetEnumerator()
+//        {
+//            return items.GetEnumerator();
+//        }
+//        //implementing non-generic version of GetEnumerator
+//        IEnumerator IEnumerable.GetEnumerator()
+//        {
+//            return GetEnumerator();
+//        }
+//    }
+//    class Program
+//    {
+//        static void Main()
+//        {
+//            var collection = new MyCustomCollection<string>();
+//            collection.Add("Hello");
+//            collection.Add("Custom");
+//            collection.Add("Collection");
+
+//            Console.WriteLine("Items in the collection:");
+//            foreach (var item in collection)
+//            {
+//                Console.WriteLine(item);
+//            }
+//            collection.Remove("Custom");
+//            Console.WriteLine("\nItems after removal:");
+//            foreach (var item in collection)
+//            {
+//                Console.WriteLine(item);
+//            }
+
+//        }
+//    }
+//}
+
+
+
+
