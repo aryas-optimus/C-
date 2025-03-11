@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
@@ -617,18 +618,18 @@ using System.Threading.Tasks;
 //    {
 //        static void Main()
 //        {
-            
+
 //            MyCollection collection = new MyCollection();
 
-           
+
 //            collection.AddItem(10);
 //            collection.AddItem(20);
 //            collection.AddItem(30);
 
-           
+
 //            Console.WriteLine(collection.ToString());
 
-            
+
 //            Console.WriteLine("Item at index 1: " + collection.GetItem(1));
 
 //            collection.RemoveItem(20);
@@ -636,3 +637,102 @@ using System.Threading.Tasks;
 //        }
 //    }
 //}
+
+//Expression Tree
+//class Program
+//{
+//    public static void Main(string[] args)
+//    {
+//        Expression<Func<int, bool>> lam = num => num < 5;
+//        bool result = lam.Compile()(3);
+//        Console.WriteLine(result);
+//    }
+//}
+
+
+//class Program
+//{
+//    static void Main(string[] args)
+//    { 
+//        BinaryExpression b1 = Expression.MakeBinary(ExpressionType.Multiply, Expression.Constant(10), Expression.Constant(2));
+//        BinaryExpression b2 = Expression.MakeBinary(ExpressionType.Divide, Expression.Constant(10), Expression.Constant(5));
+//        BinaryExpression b3 = Expression.MakeBinary(ExpressionType.Subtract, Expression.Constant(10), Expression.Constant(2));
+//        BinaryExpression b4 = Expression.MakeBinary(ExpressionType.Subtract, b1, b2);
+//        BinaryExpression b5 = Expression.MakeBinary(ExpressionType.Add, b4, b3);
+
+
+//        int result = Expression.Lambda<Func<int>>(b5).Compile()();
+//        Console.WriteLine("( 10* 2 ) + ( 10/5) - (5-1) : {0}", result);
+//    }
+//}
+
+
+
+//Decompose
+//class Program
+//{
+//    static void Main()
+//    {
+//        Expression<Func<int, bool>> expr = num => num < 5;
+//        ParameterExpression param = (ParameterExpression)expr.Parameters[0];
+//        BinaryExpression operation = (BinaryExpression)expr.Body;
+//        ParameterExpression left = (ParameterExpression)operation.Left;
+//        ConstantExpression right = (ConstantExpression)operation.Right;
+
+//        Console.WriteLine("Decomposed expression: {0} => {1} {2} {3}", param.Name, left.Name, operation.NodeType, right.Value);
+//    }
+//}
+
+
+//Creating Expression tree
+//class Program
+//{
+//    static void Main()
+//    {
+//        Expression<Func<int, int, int>> expr = (a, b) => a + b;
+//        Console.WriteLine(expr.Body);
+//    }
+//}
+
+//Breaking Down
+//class Program
+//{
+//    static void Main()
+//    {
+//        Expression<Func<int, int, int>>expr = (a, b) => a + b;
+//        ParameterExpression param1 = expr.Parameters[0];
+//        ParameterExpression param2 = expr.Parameters[1];
+//        Console.WriteLine($"Parameter 1: {param1.Name}");
+//        Console.WriteLine($"Parameter 2: {param2.Name}");
+//        BinaryExpression operation = (BinaryExpression)expr.Body;
+//        Console.WriteLine($"Operation: {operation.NodeType}");
+//        BinaryExpression body = (BinaryExpression)expr.Body;
+//        Console.WriteLine("Left Operand:" + body.Left);
+//        Console.WriteLine("Right Operand:" + body.Right);
+//    }
+//}
+
+
+
+//Visitor
+class Program
+{
+    static void Main()
+    {
+        Expression<Func<int>> expr = () => 5 + 10;
+        VisitExpression(expr.Body);
+    }
+    static void VisitExpression(Expression expr)
+    {
+        if (expr is BinaryExpression binary)
+        {
+            Console.WriteLine($"Operator: {binary.NodeType}");
+            VisitExpression(binary.Left);
+            VisitExpression(binary.Right);
+        }
+        else if (expr is ConstantExpression constant)
+        {
+            Console.WriteLine($"Constant: {constant.Value}");
+        }
+    }
+}
